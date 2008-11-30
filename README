@@ -1,0 +1,30 @@
+#######################################################################
+#                        update-dnsomatic
+#
+# Perl script which updates DNS-O-Matic with your current IP address.
+# Inspired from original code posted on the OpenDNS forum here...
+# <http://forums.opendns.com/comments.php?DiscussionID=1135>
+# 
+# ... and hacked about by prawn: sean dot prawn at gmail dot com
+# to specifically work with DNS-0-Matic.
+#
+# Overview:  Program visits http://myip.dnsomatic.com/ to get your IP
+#            address.  If it has changed, it will perfom a web update
+#            on the DNS-O-Matic site and store your new IP address in 
+#            /etc/update-dnsomatic/myip.  Results are logged in 
+#            the syslog.
+#
+#  Installing:  Edit the file config with at least your DNS-O-Matic
+#               user id and password.  You may want to assign myhost
+#               with your domain name if you only wish to update that
+#               item.
+#
+#  As root or sudo:
+#    
+#  ./install.sh
+#
+# As far as I am aware the Modules used in this code are distributed 
+# with Perl.
+# 
+# prawn <sean.prawn@gmail.com>                      26th November, 2008
+#######################################################################
