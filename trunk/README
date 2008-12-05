@@ -23,8 +23,16 @@
 #    
 #  ./install.sh
 #
-# As far as I am aware the Modules used in this code are distributed 
-# with Perl.
+# Perl Modules:
+# You may need to install Crypt::SSLeay in order for the https access
+# to work.  Debian based uses can install the module by:
+#  
+#  apt-get install libcrypt-ssleay-perl
+#
+# Other distibutions should read the documentation here:
+#
+# <http://search.cpan.org/src/DLAND/Crypt-SSLeay-0.57_01/README>
+# 
 # 
 # prawn <sean.prawn@gmail.com>                      26th November, 2008
 #######################################################################
