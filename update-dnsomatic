@@ -44,7 +44,7 @@ use LWP::UserAgent;
 use Sys::Syslog;
 
   my ($progname, $progpath, $progsuffix) = fileparse($0, qr"\..*");
-  my $version = "0.1";
+  my $version = "0.2";
   my $write_new_ip = 0;
   $| = 1;
  
@@ -70,7 +70,7 @@ use Sys::Syslog;
  
   } elsif ($update =~ /good/) {
  
-    write_log("info", "Successful update of the opendns account $address");
+    write_log("info", "Successful update of account $address");
     write_new_ip();
     print "$update\n";
     
@@ -82,7 +82,7 @@ use Sys::Syslog;
   } else {
  
     write_log("info", 
-              "Update of the opendns account gave no known response $update");
+              "Update of the account gave no known response $update");
  
   }
   
@@ -97,7 +97,7 @@ sub load_config {
   $config{wildcard} = 'NOCHG';
   $config{mx}       = 'NOCHG';
   $config{backmx}   = 'NOCHG';
- 
+
   my $config_file = "/etc/update-dnsomatic/config";
 
   #load config
@@ -170,24 +170,20 @@ sub update_dnsomatic {
     # Define user agent type
     $ua->agent("Update-DNSOMatic/$version");
     
-    $ua->credentials(
-    
-      "$config{host}:$config{port}",
-      'DNSOMATIC',
-      "$config{user}" => "$config{pass}"
-   
-    );
-    
-    # Request object
+    # Request URL
     my $url = "https://"   . $config{host} . $config{path} . 
               "hostname="  . $config{myhost} .
               "&myip="     . $address .
               "&mx="       . $config{mx} .
               "&backmx="   . $config{backmx} .
               "&wildcard=" . $config{wildcard}; 
+  
+    my $req = HTTP::Request->new(GET => $url);
+ 
+    $req->authorization_basic($config{user}, $config{pass});
 
     # Make the request
-    my $res = $ua->get($url);
+    my $res = $ua->request($req);
 
     # Check the response
     if ($res->is_success) {
@@ -295,7 +291,9 @@ sub write_log {
   
   my $priority = shift;
   my $msg = shift;
-   
+
+  print "$msg\n"; 
+
   openlog($progname, 'pid,cons', 'user');
   syslog($priority, $msg);
   closelog();
